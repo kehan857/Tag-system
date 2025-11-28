@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天九集团业绩知识库方案汇报</title>
+    <style>
+        :root {
+            --primary: #0047AB; /* 天九/科技蓝 */
+            --secondary: #00C2FF; /* 火山引擎蓝 */
+            --accent: #FF8C00; /* 资产金 */
+            --bg: #F5F7FA;
+            --text: #333;
+            --card-bg: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* 导航模拟 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        .logo {
+            font-weight: 800;
+            font-size: 20px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo span {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        /* 幻灯片容器 */
+        .slide-container {
+            max-width: 1200px;
+            margin: 80px auto 0;
+            padding: 20px;
+        }
+
+        /* 通用板块样式 */
+        .section {
+            min-height: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            margin-bottom: 30px;
+            padding: 40px 0;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: var(--secondary);
+            margin: 10px auto;
+        }
+        .section-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+
+        /* 封面 */
+        .hero {
+            text-align: center;
+            background: linear-gradient(135deg, #001f3f, #0047AB);
+            color: white;
+            border-radius: 20px;
+            padding: 60px 20px;
+            box-shadow: 0 20px 50px rgba(0,71,171,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero h1 { font-size: 56px; margin-bottom: 20px; }
+        .hero p { font-size: 24px; opacity: 0.9; }
+        .hero.tagline {
+            margin-top: 40px;
+            display: inline-block;
+            background: rgba(255,255,255,0.1);
+            padding: 10px 30px;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        /* 卡片网格 */
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        .card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+            border-top: 5px solid var(--secondary);
+        }
+        .card:hover { transform: translateY(-10px); }
+        .card h3 { font-size: 22px; margin-bottom: 15px; color: var(--primary); }
+        .card p { color: #666; font-size: 15px; }
+        .card.icon { font-size: 40px; margin-bottom: 20px; }
+
+        /* 对比图表 */
+        .comparison {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 50px;
+            margin: 40px 0;
+        }
+        .vs-circle {
+            background: #eee;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #999;
+        }
+        .state-box {
+            flex: 1;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        .state-bad { background: #FFF0F0; border: 1px solid #FFCDCD; }
+        .state-good { background: #F0F9FF; border: 1px solid #BEE3F8; }
+
+        /* 标签体系可视化 */
+        .tag-system {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .tag-dimension {
+            background: white;
+            width: 220px;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            text-align: center;
+            position: relative;
+        }
+        .tag-dimension.badge {
+            background: var(--primary);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .tag-list {
+            list-style: none;
+            margin-top: 15px;
+            text-align: left;
+            font-size: 14px;
+            color: #555;
+        }
+        .tag-list li { margin-bottom: 8px; padding-left: 15px; position: relative; }
+        .tag-list li::before { content: '•'; color: var(--secondary); position: absolute; left: 0; }
+
+        /* 场景演示：CKO的一天 */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .timeline-item {
+            padding: 20px 30px;
+            background: white;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            border-left: 5px solid var(--accent);
+        }
+        .timeline-time { font-weight: bold; color: var(--primary); min-width: 80px; }
+        .timeline-content h4 { margin-bottom: 5px; }
+
+        /* 安全矩阵 */
+        .security-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .security-table th { background: var(--primary); color: white; padding: 15px; text-align: left; }
+        .security-table td { padding: 15px; border-bottom: 1px solid #eee; color: #555; }
+        .security-table tr:last-child td { border-bottom: none; }
+        .level-badge {
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .l1 { background: #E6FFFA; color: #008f72; }
+        .l5 { background: #FFF5F5; color: #C53030; }
+
+        /* 路线图 */
+        .roadmap {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+        .phase {
+            flex: 1;
+            background: white;
+            margin: 0 10px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            position: relative;
+        }
+        .phase::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 30px;
+            background: var(--secondary);
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* 底部 */
+        footer {
+            text-align: center;
+            padding: 50px;
+            background: #fff;
+            color: #666;
+            margin-top: 50px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+        .btn:hover { background: #e67e00; }
+
+        /* 打印和PDF样式 */
+        @page {
+            margin: 0 !important;
+            size: A4;
+            padding: 0;
+        }
+        
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            
+            html, body {
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100%;
+                height: 100%;
+            }
+            
+            .navbar {
+                display: none !important;
+            }
+            
+            .section {
+                opacity: 1 !important;
+                transform: none !important;
+                animation: none !important;
+                page-break-inside: avoid;
+                margin-bottom: 20px !important;
+                padding: 20px 0 !important;
+            }
+            
+            .slide-container {
+                margin-top: 0 !important;
+                padding: 0 !important;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="#00C2FF"/>
+                <path d="M2 17L12 22L22 17" stroke="#0047AB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M2 12L12 17L22 12" stroke="#0047AB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            天九集团 <span>业绩知识库</span>
+        </div>
+        <div style="font-size: 14px; color: #666;">汇报人：火山引擎专项服务组</div>
+    </nav>
+
+    <div class="slide-container">
+
+        <section class="section hero">
+            <h1>标签体系框架与建设方案</h1>
+            <p>基于火山引擎技术底座 · 赋能20+组织首席知识官</p>
+            <div class="tagline">让10TB“沉睡数据”变为“流动资产”</div>
+            <br>
+            <a href="#problem" class="btn">开始汇报</a>
+        </section>
+
+        <section id="problem" class="section">
+            <h2 class="section-title">01. 现状与痛点：为什么需要标签体系？</h2>
+            <p class="section-subtitle">数据就在那里，但我们“看不见、动不了”</p>
+            
+            <div class="comparison">
+                <div class="state-box state-bad">
+                    <div style="font-size: 40px; margin-bottom: 10px;">📉</div>
+                    <h3>当前困境</h3>
+                    <ul style="text-align: left; margin-top: 15px; list-style: none;">
+                        <li>❌ <strong>搜不到：</strong> 搜“考勤”，出来的是两年前的作废草稿</li>
+                        <li>❌ <strong>不敢放：</strong> 薪酬制度、高层纪要不敢入库，怕泄密</li>
+                        <li>❌ <strong>学不会：</strong> 火山后台全是代码，运营人员(CKO)不会用</li>
+                    </ul>
+                </div>
+                <div class="vs-circle">VS</div>
+                <div class="state-box state-good">
+                    <div style="font-size: 40px; margin-bottom: 10px;">🚀</div>
+                    <h3>建设目标</h3>
+                    <ul style="text-align: left; margin-top: 15px; list-style: none;">
+                        <li>✅ <strong>精准直达：</strong> 3步之内，只看有效的、最新的</li>
+                        <li>✅ <strong>隐形安保：</strong> 系统自动过滤权限，杜绝越权</li>
+                        <li>✅ <strong>极简操作：</strong> 像发朋友圈一样，完成知识治理</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">02. 核心方案：一个“懂业务”的中间层</h2>
+            <p class="section-subtitle">我们不直接让运营用火山后台，而是搭建一个“知识管理助手”</p>
+            
+            <div class="grid-3">
+                <div class="card">
+                    <div class="icon">🤖</div>
+                    <h3>自动身份识别</h3>
+                    <p>员工登录时，系统自动识别其属于“华东大区”还是“集团总部”。<strong>无需手动填写，杜绝身份伪造。</strong></p>
+                </div>
+                <div class="card">
+                    <div class="icon">🧠</div>
+                    <h3>AI 智能打标</h3>
+                    <p>上传视频或文档时，火山引擎AI自动提取“关键词”和“摘要”。<strong>减少人工输入，提升检索命中率。</strong></p>
+                </div>
+                <div class="card">
+                    <div class="icon">🔒</div>
+                    <h3>无感权限过滤</h3>
+                    <p>搜索时，系统在后台自动加上一把锁。<strong>员工只能搜到他那把钥匙能开的箱子。</strong></p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">03. “4+1”维度标签体系设计</h2>
+            <p class="section-subtitle">给每一个知识点装上“GPS”定位系统</p>
+
+            <div class="tag-system">
+                <div class="tag-dimension">
+                    <div class="badge">身份维度 (自动)</div>
+                    <h4>你是谁家的？</h4>
+                    <ul class="tag-list">
+                        <li>集团总部</li>
+                        <li>华东大区</li>
+                        <li>科技子公司</li>
+                        <li>...</li>
+                    </ul>
+                    <p style="font-size: 12px; color: #999; margin-top: 10px;">解决物理隔离</p>
+                </div>
+
+                <div class="tag-dimension">
+                    <div class="badge" style="background-color: #C53030;">安全维度 (必选)</div>
+                    <h4>谁能看？</h4>
+                    <ul class="tag-list">
+                        <li>L1: 公开级</li>
+                        <li>L2: 内部级</li>
+                        <li>L3: 秘密级</li>
+                        <li>L4: 机密级</li>
+                    </ul>
+                    <p style="font-size: 12px; color: #999; margin-top: 10px;">解决安全红线</p>
+                </div>
+
+                <div class="tag-dimension">
+                    <div class="badge" style="background-color: var(--accent);">业务维度 (可选)</div>
+                    <h4>什么事？</h4>
+                    <ul class="tag-list">
+                        <li>2025战略项目</li>
+                        <li>双11大促</li>
+                        <li>新员工培训</li>
+                    </ul>
+                    <p style="font-size: 12px; color: #999; margin-top: 10px;">解决跨部门协作</p>
+                </div>
+
+                <div class="tag-dimension">
+                    <div class="badge" style="background-color: #38A169;">形态维度 (可选)</div>
+                    <h4>什么样子？</h4>
+                    <ul class="tag-list">
+                        <li>制度/政策</li>
+                        <li>SOP操作指引</li>
+                        <li>合同模板</li>
+                        <li>案例/复盘</li>
+                    </ul>
+                    <p style="font-size: 12px; color: #999; margin-top: 10px;">解决精准筛选</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">04. 场景演示：首席知识官的一天</h2>
+            <p class="section-subtitle">告别代码，全程“做选择题”</p>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-time">09:00 AM</div>
+                    <div class="timeline-content">
+                        <h4>登录系统</h4>
+                        <p>CKO打开“天九知识助手”，系统自动锁定身份为 <strong>[销售管理部]</strong>。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">09:05 AM</div>
+                    <div class="timeline-content">
+                        <h4>上传文件</h4>
+                        <p>拖拽上传《2024Q4销售佣金政策.pdf》。AI自动分析内容并预填标题。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">09:06 AM</div>
+                    <div class="timeline-content">
+                        <h4>做选择题 (关键一步)</h4>
+                        <p>类型选 <strong>[制度]</strong>，密级选 <strong>[L3-秘密级]</strong> (仅本部门可见)。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">09:07 AM</div>
+                    <div class="timeline-content">
+                        <h4>发布生效</h4>
+                        <p>点击确认。此时，销售部员工能搜到，而行政部员工搜不到。<strong>全程耗时不到5分钟。</strong></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">05. 权限治理矩阵：隐形盾牌</h2>
+            <p class="section-subtitle">基于“零信任”架构的动态权限控制</p>
+            
+            <table class="security-table">
+                <thead>
+                    <tr>
+                        <th width="15%">密级</th>
+                        <th width="35%">定义</th>
+                        <th width="50%">可见范围 (系统自动执行)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="level-badge l1">L1 公开</span></td>
+                        <td>全员周知的信息</td>
+                        <td>全集团所有员工 (如：食堂菜单、放假通知)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="level-badge l1" style="background:#DEEBFF; color:#0052CC">L2 内部</span></td>
+                        <td>公司内部通用规范</td>
+                        <td>仅正式员工 (实习生/外包不可见) (如：考勤制度)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="level-badge" style="background:#FFD700; color:#856404">L3 秘密</span></td>
+                        <td>部门/项目组内部资料</td>
+                        <td><strong>本部门员工</strong> + <strong>关联项目组成员</strong> (如：项目策划案)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="level-badge" style="background:#FF7F50; color:white">L4 机密</span></td>
+                        <td>核心管理信息</td>
+                        <td>总监级以上 + 被特别授权人 (如：薪酬方案、高层纪要)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="level-badge l5">L5 绝密</span></td>
+                        <td>最高战略信息</td>
+                        <td>仅董事局 + 核心高管 (如：并购计划、核心代码)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">06. 建设路线图</h2>
+            <p class="section-subtitle">三个月落地，让数据产生价值</p>
+            
+            <div class="roadmap">
+                <div class="phase">
+                    <h3>第1个月：定标准</h3>
+                    <p style="margin-top: 15px; color: #666;">发布《标签规范白皮书》<br>确立20+组织CKO职责<br>冻结“4+1”维度选项</p>
+                </div>
+                <div class="phase">
+                    <h3>第2个月：搭平台</h3>
+                    <p style="margin-top: 15px; color: #666;">上线“知识管理助手”<br>选取HR部与IT部试点<br>跑通上传-搜索全流程</p>
+                </div>
+                <div class="phase">
+                    <h3>第3个月：全推广</h3>
+                    <p style="margin-top: 15px; color: #666;">清洗10TB历史数据<br>集成至企微/飞书<br>全员开通查询权限</p>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <h3>总结与价值</h3>
+            <p>对老板：资产盘活 · 对CKO：减负提效 · 对员工：精准直达 · 对IT：安全合规</p>
+            <br>
+            <p>© 天九集团 x 火山引擎专项服务组</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>
